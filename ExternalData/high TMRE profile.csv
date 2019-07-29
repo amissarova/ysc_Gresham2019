@@ -1,0 +1,271 @@
+Gene	Description
+ABF1	DNA damage response
+BRE1	DNA damage response
+CDC28	DNA damage response
+CDC45	DNA damage response
+CDC9	DNA damage response
+CSM3	DNA damage response
+DIN7	DNA damage response
+DPB2	DNA damage response
+DUN1	DNA damage response
+HHF1	DNA damage response
+HUG1	DNA damage response
+MCD1	DNA damage response
+MRC1	DNA damage response
+MSH2	DNA damage response
+MSH3	DNA damage response
+RAD23	DNA damage response
+RAD27	DNA damage response
+RAD51	DNA damage response
+RAD52	DNA damage response
+RAD54	DNA damage response
+RTT107	DNA damage response
+SMC5	DNA damage response
+SMC6	DNA damage response
+TOF1	DNA damage response
+FIT2	Iron deficeincy UP
+FIT3	Iron deficeincy UP
+ARN1	Iron deficeincy UP
+SIT1	Iron deficeincy UP
+ENB1	Iron deficeincy UP
+FET3	Iron deficeincy UP
+FTR1	Iron deficeincy UP
+ATX1	Iron deficeincy UP
+CCC2	Iron deficeincy UP
+FRE1	Iron deficeincy UP
+FRE3	Iron deficeincy UP
+FRE6	Iron deficeincy UP
+FET4	Iron deficeincy UP
+FET5	Iron deficeincy UP
+FTH1	Iron deficeincy UP
+HMX1	Iron deficeincy UP
+TIS11	Iron deficeincy UP
+NFU1	Iron deficeincy DOWN
+ISA1	Iron deficeincy DOWN
+LEU1	Iron deficeincy DOWN
+SDH2	Iron deficeincy DOWN
+LIP5	Iron deficeincy DOWN
+RLI1	Iron deficeincy DOWN
+HEM15	Iron deficeincy DOWN
+CTT1	Iron deficeincy DOWN
+SDH4	Iron deficeincy DOWN
+COR1	Respiration
+COX13	Respiration
+COX4	Respiration
+COX5A	Respiration
+COX6	Respiration
+HAP2	Respiration
+KGD1	Respiration
+MBR1	Respiration
+MDH1	Respiration
+NDI1	Respiration
+PET20	Respiration
+QCR10	Respiration
+QCR2	Respiration
+QCR6	Respiration
+QCR7	Respiration
+QCR9	Respiration
+RIP1	Respiration
+SDH1	Respiration
+SDH3	Respiration
+ATP14	Respiration
+ATP15	Respiration
+ATP16	Respiration
+ATP17	Respiration
+ATP2	Respiration
+ATP20	Respiration
+ATP4	Respiration
+ATP5	Respiration
+SSA1	MSN2 target
+SSA4	MSN2 target
+HSP104	MSN2 target
+TPS1	MSN2 target
+TFS1	MSN2 target
+DDR2	MSN2 target
+TSA1	MSN2 target
+HSP12	MSN2 target
+TMA10	MSN2 target
+TPS2	MSN2 target
+RTC3	MSN2 target
+GPH1	MSN2 target
+HXK1	MSN2 target
+TSA2	MSN2 target
+CYC7	MSN2 target
+PNC1	MSN2 target
+GSY1	MSN2 target
+FMP48	MSN2 target
+SSA3	MSN2 target
+ALD4	MSN2 target
+YNR014W	MSN2 target
+GPP2	MSN2 target
+DCS2	MSN2 target
+RAS2	MSN2 target
+GLK1	MSN2 target
+GPD1	MSN2 target
+HSP26	MSN2 target
+SIP18	MSN2 target
+TKL2	MSN2 target
+FMP16	MSN2 target
+ALD3	MSN2 target
+TSL1	TSL1
+PDR1	PDR response
+PDR3	PDR response
+PDR5	PDR response
+YDR417C	Gasch RP
+GUK1	Gasch RP
+SNU13	Gasch RP
+GCD11	Gasch RP
+YGL102C	Gasch RP
+FUR1	Gasch RP
+TIF2	Gasch RP
+TMA19	Gasch RP
+TEF4	Gasch RP
+TIF1	Gasch RP
+BUD28	Gasch RP
+YLR339C	Gasch RP
+APT1	Gasch RP
+ASC1	Gasch RP
+TIF34	Gasch RP
+NCS2	Gasch RP
+SSB2	Gasch RP
+YPL142C	Gasch RP
+OPI11	Gasch RP
+RPL19B	Gasch RP
+RPS8A	Gasch RP
+RPL23A	Gasch RP
+RPL32	Gasch RP
+RPL4A	Gasch RP
+RPS11B	Gasch RP
+RPL19A	Gasch RP
+RPS6B	Gasch RP
+RPS9B	Gasch RP
+RPL21A	Gasch RP
+RPS14A	Gasch RP
+RPS29B	Gasch RP
+RPL31A	Gasch RP
+RPP1A	Gasch RP
+RPL13A	Gasch RP
+RPS16B	Gasch RP
+RPL35B	Gasch RP
+RPL35A	Gasch RP
+RPL4B	Gasch RP
+RPS11A	Gasch RP
+RPS13	Gasch RP
+RPP2B	Gasch RP
+RPL12B	Gasch RP
+RPS17B	Gasch RP
+RPS18A	Gasch RP
+RPL27B	Gasch RP
+RPL37B	Gasch RP
+RPL12A	Gasch RP
+RPL34A	Gasch RP
+RPS24A	Gasch RP
+RPS8B	Gasch RP
+RPL23B	Gasch RP
+RPS26B	Gasch RP
+RPL2A	Gasch RP
+RPL30	Gasch RP
+RPL24A	Gasch RP
+RPL7A	Gasch RP
+RPL28	Gasch RP
+RPS2	Gasch RP
+RPL1B	Gasch RP
+RPL9A	Gasch RP
+RPS26A	Gasch RP
+RPS25A	Gasch RP
+RPL26B	Gasch RP
+RPL11B	Gasch RP
+RPS23A	Gasch RP
+RPL24B	Gasch RP
+RPS0A	Gasch RP
+RPL14B	Gasch RP
+RPL8A	Gasch RP
+RPL27A	Gasch RP
+RPS27B	Gasch RP
+RPL42B	Gasch RP
+RPS4B	Gasch RP
+RPL2B	Gasch RP
+RPL34B	Gasch RP
+RPL16A	Gasch RP
+RPL40A	Gasch RP
+RPS21B	Gasch RP
+RPL17B	Gasch RP
+RPL39	Gasch RP
+RPS22A	Gasch RP
+RPS14B	Gasch RP
+RPL43B	Gasch RP
+RPS5	Gasch RP
+RPS4A	Gasch RP
+RPL14A	Gasch RP
+RPS27A	Gasch RP
+RPL17A	Gasch RP
+RPS21A	Gasch RP
+RPL40B	Gasch RP
+RPL8B	Gasch RP
+RLP24	Gasch RP
+RPL15A	Gasch RP
+RPS0B	Gasch RP
+RPL22A	Gasch RP
+RPL10	Gasch RP
+RPS31	Gasch RP
+RPL37A	Gasch RP
+RPS28B	Gasch RP
+RPL38	Gasch RP
+RPS25B	Gasch RP
+RPP0	Gasch RP
+RPL26A	Gasch RP
+RPS22B	Gasch RP
+RPS29A	Gasch RP
+RPS1A	Gasch RP
+RPL6B	Gasch RP
+RPS17A	Gasch RP
+RPS18B	Gasch RP
+RPS1B	Gasch RP
+RPL6A	Gasch RP
+RPL15B	Gasch RP
+RPL13B	Gasch RP
+RPS16A	Gasch RP
+RPL36A	Gasch RP
+RPS10B	Gasch RP
+RPL20A	Gasch RP
+RLP7	Gasch RP
+RPL9B	Gasch RP
+RPL16B	Gasch RP
+RPS7B	Gasch RP
+RPL42A	Gasch RP
+RPS3	Gasch RP
+RPL18B	Gasch RP
+RPS19B	Gasch RP
+RPP2A	Gasch RP
+RPS15	Gasch RP
+RPL18A	Gasch RP
+RPS19A	Gasch RP
+RPL25	Gasch RP
+RPL3	Gasch RP
+RPS7A	Gasch RP
+RPS28A	Gasch RP
+RPS30B	Gasch RP
+RPL33B	Gasch RP
+RPS10A	Gasch RP
+RPL20B	Gasch RP
+RPS12	Gasch RP
+RPL21B	Gasch RP
+RPS9A	Gasch RP
+RPS6A	Gasch RP
+RPL33A	Gasch RP
+RPL7B	Gasch RP
+RPL1A	Gasch RP
+RPL43A	Gasch RP
+RPL11A	Gasch RP
+RPS23B	Gasch RP
+RPP1B	Gasch RP
+RPL41B	Gasch RP
+RPL41A	Gasch RP
+RPL22B	Gasch RP
+RPL29	Gasch RP
+RPS20	Gasch RP
+RPS24B	Gasch RP
+RPS30A	Gasch RP
+RPL31B	Gasch RP
+RPL5	Gasch RP
+RPL36B	Gasch RP
