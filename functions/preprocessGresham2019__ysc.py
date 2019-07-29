@@ -1,4 +1,4 @@
-def preprocessGresham2019__ysc(filenames, strainOfInterest, geneToORFmapping):
+def preprocessGresham2019__ysc(filenames, strainOfInterest):
 
     '''
     Reads tsv-files (one DS for one element in filenames);
@@ -17,11 +17,6 @@ def preprocessGresham2019__ysc(filenames, strainOfInterest, geneToORFmapping):
     import scprep
     import pandas as pd
 
-    # make a mapping between ORFs and Systematic gene names
-    GeneDF = pd.Series.from_csv(geneToORFmapping, sep='\t', header=None)
-    GeneDF = pd.Series.to_dict(GeneDF)
-
-
     DF = []
     for i in filenames:
         # read Gresham's data
@@ -32,7 +27,6 @@ def preprocessGresham2019__ysc(filenames, strainOfInterest, geneToORFmapping):
 
         # remove empty cells (rows) and genes (columns)
         currentDF = scprep.filter.filter_empty_cells(currentDF)
-        #currentDF = scprep.filter.filter_empty_genes(currentDF)
 
         #scprep.plot.plot_library_size(YPD, cutoff=0)
         #plt.show()
@@ -47,9 +41,6 @@ def preprocessGresham2019__ysc(filenames, strainOfInterest, geneToORFmapping):
 
         # Merging YPD and ID select only WT entries from YPD
         currentDF = pd.merge(currentDF, ID, how='right', left_on='Cells', right_on='Cells')
-
-        # changing column names from ORF to genes
-        #currentDF.rename(columns=dict(zip(GeneDF.keys(), GeneDF.values())), inplace=True)
 
         DF.append(currentDF)
 
