@@ -8,7 +8,7 @@ def addGrowthRate(df):
     import numpy as np
 
     #growth rate will be based on RP from Gasch2017 dataset
-    ANNO = pd.read_excel('~/Develop/PycharmProjects/ysc/Gresham2019/Externaldata/Gasch2017/genesToGeneFamilies.xlsx')
+    ANNO = pd.read_excel('~/Develop/PycharmProjects/ysc/ysc_Gresham2019/ExternalData/Gasch2017/genesToGeneFamilies.xlsx')
     ANNO.replace({'SGD-annotated RP': 'RP', 'RP cluster': 'RP', 'iESR cluster': 'iESR',
                   'RiBi (originally called PAC) cluster': 'RiBi'}, inplace=True)
 

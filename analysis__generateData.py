@@ -2,6 +2,7 @@ import scprep
 import pandas as pd
 import numpy as np
 import magic
+import math
 import statsmodels.api as sm
 from sklearn import linear_model
 
@@ -10,17 +11,17 @@ from sklearn import linear_model
 # 1. load a dataFrame with scRNA-seq for YPD data.
 # save: './Gresham2019/Data/YPD.csv'
 # !!! Don't forget that filename should be a list (even if contains one entry)
-from Gresham2019.functions.preprocessGresham2019__ysc import preprocessGresham2019__ysc
-YPD = preprocessGresham2019__ysc(['~/Develop/PycharmProjects/ysc/Gresham2019/Externaldata/Gresham2019/GSM3564448_YPD-fastqTomat0-Counts.tsv'],
-                                 'WT(ho)', '~/Develop/PycharmProjects/ysc/Gresham2019/Externaldata/Gresham2019/GSM3564448_YPD_genes.tsv')
+from ysc_Gresham2019.functions.preprocessGresham2019__ysc import preprocessGresham2019__ysc
+YPD = preprocessGresham2019__ysc(['~/Develop/PycharmProjects/ysc/ysc_Gresham2019/ExternalData/Gresham2019/GSM3564448_YPD-fastqTomat0-Counts.tsv'],
+                                 'WT(ho)', '~/Develop/PycharmProjects/ysc/ysc_Gresham2019/ExternalData/Gresham2019/GSM3564448_YPD_genes.tsv')
 YPD = YPD[0]
 # save to .csv
-YPD.to_csv('./Gresham2019/Data/YPD.csv')
+YPD.to_csv('./ysc_Gresham2019/Data/YPD.csv')
 
 ############################################################################
 
 # 2. make a YPD-MAGIC dataset
-YPD = pd.read_csv('./Gresham2019/Data/YPD.csv')
+YPD = pd.read_csv('./ysc_Gresham2019/Data/YPD.csv')
 genes = list(YPD.columns.values)
 genes.remove('Cells')
 genes.remove('Genotype')
@@ -34,7 +35,32 @@ YPD_magic_t2 = magic_operator.fit_transform(YPD[genes], genes=genes)
 YPD_magic_t2 = pd.merge(YPD_magic_t2, YPD[['Cells', 'Genotype']], how='outer', right_index=True, left_index=True)
 
 # save dataset
-YPD_magic_t2.to_csv('./Gresham2019/Data/YPD_magic_t2.csv')
+YPD_magic_t2.to_csv('./ysc_Gresham2019/Data/YPD_magic_t2.csv')
+
+############################################################################
+
+# 3. make a DS containing log2FC from Riddhi's (high TMRE) and David's (slow cells):
+
+# read Dhar's
+Dhar19 = pd.read_csv('./ysc_Gresham2019/ExternalData/Dhar2019/Dhar2019.csv', sep='\t')
+Dhar19['Dhar_log_FC'] = np.log2(pd.to_numeric(Dhar19['HIGH']) / pd.to_numeric(Dhar19['LOW']) + 1)
+Dhar19 = Dhar19[['Gene', 'Dhar_log_FC']]
+Dhar19.replace([np.inf, -np.inf], np.nan, inplace=True)
+Dhar19.dropna(inplace=True)
+# read vanDijk's
+vanDijk15 = pd.read_csv('./ysc_Gresham2019/ExternalData/vanDijk2015/vanDijk2015.csv', sep='\t')
+vanDijk15['vanDijk_log_FC'] = np.log2(pd.to_numeric(vanDijk15['Slow']) / pd.to_numeric(vanDijk15['Fast']) + 1)
+vanDijk15 = vanDijk15[['ORF', 'Gene', 'vanDijk_log_FC']]
+vanDijk15.replace([np.inf, -np.inf], np.nan, inplace=True)
+vanDijk15.dropna(inplace=True)
+#
+slowStat = pd.merge(Dhar19, vanDijk15, how='inner', on='Gene')
+slowStat.to_csv('./ysc_Gresham2019/Data/slowStat.csv')
+
+
+
+
+
 
 
 

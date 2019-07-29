@@ -3,7 +3,7 @@ def addRankBasedOnGaschRP(df, N_bins):
     import numpy as np
 
     # a) make an ANNO dataset: which genes belong to RP, RiBi and iESR
-    ANNO = pd.read_excel('~/Develop/PycharmProjects/ysc/Gresham2019/Externaldata/Gasch2017/genesToGeneFamilies.xlsx')
+    ANNO = pd.read_excel('~/Develop/PycharmProjects/ysc/ysc_Gresham2019/ExternalData/Gasch2017/genesToGeneFamilies.xlsx')
     ANNO.replace('SGD-annotated RP', 'RP', inplace=True)
     ANNO.replace('RP cluster', 'RP', inplace=True)
     ANNO.replace('RiBi (originally called PAC) cluster', 'RiBi', inplace=True)

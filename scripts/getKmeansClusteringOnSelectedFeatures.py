@@ -15,6 +15,8 @@ def getKmeansClusteringOnSelectedFeatures(df, numClusters, figname, figtitle, da
     import pandas as pd
     import scipy.stats as stats
     import numpy as np
+    from matplotlib import cm
+    from matplotlib.colors import ListedColormap, LinearSegmentedColormap
     import seaborn as sns
     # for visualization
     if dataPhate == []:
@@ -32,10 +34,11 @@ def getKmeansClusteringOnSelectedFeatures(df, numClusters, figname, figtitle, da
     df['clusterPredictions'] = y_pred.tolist()
 
     # plot PHATE with colored clusters
-    scprep.plot.scatter2d(dataPhate, c=df['clusterPredictions'], title=figtitle, cmap='tab10')
+    viridis = cm.get_cmap('viridis', 6)
+    scprep.plot.scatter2d(dataPhate, c=df['clusterPredictions'], title=figtitle, cmap=viridis)
     plt.tight_layout()
     plt.show()
-    plt.savefig('./Gresham2019/figures/phateWithCellClusters_' + figname)
+    plt.savefig('./ysc_Gresham2019/figures/phateWithCellClusters_' + figname)
 
     # make a variationExplained_df: each row - cluster num; each column - one gene set.
     # value: a p-value of ttest -> values in given gene set in a given cluster VS values in given gene set in other cluster

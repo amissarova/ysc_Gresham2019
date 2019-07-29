@@ -15,7 +15,7 @@ def clusteredCorrMatrix(df, figname, figtitle, threshGrowthRate=1, columnsToExcl
     import seaborn as sns
     import matplotlib.pyplot as plt
 
-    from Gresham2019.functions.addGrowthRate import addGrowthRate
+    from ysc_Gresham2019.functions.addGrowthRate import addGrowthRate
     # add growthRate (if doesn't exist already on this dataset)
     if not 'GrowthRate' in df.columns:
         df = addGrowthRate(df)
@@ -76,7 +76,7 @@ def clusteredCorrMatrix(df, figname, figtitle, threshGrowthRate=1, columnsToExcl
         ax.set_xticklabels([])
     ax.set_title(figtitle)
     plt.tight_layout()
-    plt.savefig('./Gresham2019/figures/' + figname)
+    plt.savefig('./ysc_Gresham2019/figures/' + figname)
 
     # return rearranged dataset (based on hierarchy) and correlation matrix
     return dfSlow_rearranged, corrMtrx_rearranged, myClusteredGroups
