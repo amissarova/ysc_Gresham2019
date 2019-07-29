@@ -2,6 +2,7 @@ import scprep
 import pandas as pd
 import numpy as np
 import magic
+import phate
 import math
 import statsmodels.api as sm
 from sklearn import linear_model
@@ -9,7 +10,7 @@ from sklearn import linear_model
 
 ##################################################################################################################
 
-# 1. load a dataFrame with scRNA-seq for YPD data.
+# 1. Load a dataFrame with scRNA-seq for YPD data.
 # !!!: unzip data first in your local directory
 
 from ysc_Gresham2019.functions.preprocessGresham2019__ysc import preprocessGresham2019__ysc
@@ -21,7 +22,7 @@ YPD.to_csv('./ysc_Gresham2019/Data/YPD.csv')
 
 ##################################################################################################################
 
-# 2. make a YPD-MAGIC dataset
+# 2. Make a YPD-MAGIC dataset
 
 YPD = pd.read_csv('./ysc_Gresham2019/Data/YPD.csv')
 genes = list(YPD.columns.values)
@@ -41,7 +42,7 @@ YPD_magic_t2.to_csv('./ysc_Gresham2019/Data/YPD_magic_t2.csv')
 
 ##################################################################################################################
 
-# 3. make a DS containing log2FC from Riddhi's (high TMRE) and David's (slow cells):
+# 3. Make a DS containing log2FC from Riddhi's (high TMRE) and David's (slow cells):
 
 # read Dhar's data
 Dhar19 = pd.read_csv('./ysc_Gresham2019/ExternalData/Dhar2019/Dhar2019.csv', sep='\t')
@@ -59,89 +60,26 @@ vanDijk15.dropna(inplace=True)
 slowStat = pd.merge(Dhar19, vanDijk15, how='inner', on='Gene')
 slowStat.to_csv('./ysc_Gresham2019/Data/slowStat.csv')
 
+##################################################################################################################
+
+# MOVE HERE A SCRIPT TO GENERATE stat_YPD_magic_t2__SlowRearranged_W_CellClusters
+
+##################################################################################################################
+
+# 4. Add to MAGIC YPD dataset: PHATE coordinates and clustering (based on df)
+
+YPD_magic_t2 = pd.read_csv('./ysc_Gresham2019/Data/YPD_magic_t2.csv', index_col=0)
+YPD_magic_t2.drop(columns=['Cells', 'Genotype'], inplace=True)
+phate_op = phate.PHATE()
+dataPhate = phate_op.fit_transform(YPD_magic_t2)
+df = pd.read_csv('./ysc_Gresham2019/Data/stat_YPD_magic_t2__SlowRearranged_W_CellClusters.csv', index_col=0)
+YPD_magic_t2 = YPD_magic_t2.merge(df, how='left', left_index=True, right_index=True)
+YPD_magic_t2.fillna(1000, inplace=True)
+YPD_magic_t2['Phate 1'] = dataPhate[:, 0]
+YPD_magic_t2['Phate 2'] = dataPhate[:, 1]
+YPD_magic_t2.to_csv('./ysc_Gresham2019/Data/YPD_magic_t2_W_Phate_and_cellClustering.csv')
 
 
 
 
 
-
-
-
-
-
-
-
-#######################################################################
-#######   SUUPP
-# SUPP1. Make a dataFrame where every column represents average across GOs (for GOs with no less than 25 entries).
-# save: './Gresham2019/Data/GOStat_moreThan25ORFs_WT.csv'.
-YPD = pd.read_csv('./Gresham2019/Data/YPD.csv')
-
-# a) make a GO-dictionary, where GO is a key and all ORFs belonging to this GO is a value
-GO = []
-ORFs = []
-for line in open('./Gresham2019/Externaldata/scerevisiae.GO_BP_CC_MF.ENSG_modify.gmt'):
-    values = line.split("\t")
-    currentORFs = []
-    currentGO = values[0]
-    i = 2
-    while values[i] != '' and i < len(values)-1:
-        currentORFs.append(values[i])
-        i += 1
-    # take only GOs with >= 25 ORFs
-    if len(currentORFs) >= 25 and currentGO[0:2] == 'BP':
-        GO.append(currentGO)
-        ORFs.append(currentORFs)
-# b) function that for one cell and all GOs returns mean/median stat for all GOs
-def getStatForGO(row, GO, ORFs):
-    for i in range(len(GO)):
-        data = row[ORFs[i]]
-        row['mean_' + GO[i]] = data.mean()
-    return row
-columnsToSave = ['Cells', 'Genotype']
-for i in range(len(GO)):
-    columnsToSave.append('mean_' + GO[i])
-# c) apply the function to everything
-GOStat = YPD.apply(getStatForGO, args=(GO, ORFs), axis=1)
-GOStat = GOStat[columnsToSave[1:]]
-# d) save to .csv
-GOStat.to_csv('./Gresham2019/Data/GOStat_moreThan25ORFs_WT.csv')
-
-
-#########
-# SUPP 2. Make a stat dataset for each cell and for 3 groups from Gasch2017
-# save to './Gresham2019/Data/GaschStat.csv'.
-
-YPD = pd.read_csv('./Gresham2019/Data/YPD.csv')
-# a) make an ANNO dataset: which genes belong to RP, RiBi and iESR
-ANNO = pd.read_excel('~/Develop/PycharmProjects/ysc/Gresham2019/Externaldata/Gasch2017/genesToGeneFamilies.xlsx')
-ANNO.replace('SGD-annotated RP', 'RP', inplace=True)
-ANNO.replace('RP cluster', 'RP', inplace=True)
-ANNO.replace('RiBi (originally called PAC) cluster', 'RiBi', inplace=True)
-ANNO.replace('iESR cluster', 'iESR', inplace=True)
-
-# b) function that for one cell and GeneGroup returns stat for this GeneGroup
-def getStatForFamily(row, ANNO, familyName):
-    df = ANNO.loc[(ANNO['Gene Group'] == familyName)]
-    df = df['UID']
-    rows = df.values.tolist()
-    data = row[row.index.intersection(rows)]
-    row[familyName] = data.values.tolist()
-    row['mean_' + familyName] = np.mean(data.values.tolist())
-    row['median_' + familyName] = np.median(data.values.tolist())
-    row['max_' + familyName] = np.max(data.values.tolist())
-    row['std_' + familyName] = np.std(data.values.tolist())
-
-    return row[{'Cells', 'Genotype', familyName, 'mean_' + familyName, 'median_' + familyName, 'max_' + familyName, 'std_' + familyName}]
-
-# c) a stat dataset for each cell and for 3 groups from Gasch2017
-GaschStat = pd.DataFrame()
-familyNames = ['RP', 'iESR', 'RiBi']
-for i in familyNames:
-    tempGaschStat = YPD.apply(getStatForFamily, args=(ANNO, i), axis=1)
-    if GaschStat.empty:
-        GaschStat = tempGaschStat
-    else:
-        GaschStat = pd.merge(GaschStat, tempGaschStat, how='outer', on=['Cells', 'Genotype'])
-# d) save to .csv
-GaschStat.to_csv('./Gresham2019/Data/GaschStat.csv')

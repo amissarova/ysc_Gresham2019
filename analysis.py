@@ -3,27 +3,22 @@
 import scprep
 import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns
 import numpy as np
 import phate
-from sklearn.cluster import KMeans
-from scipy.spatial.distance import cdist
 from matplotlib import cm
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 import csv
-import math
 import matplotlib.colors as colors
 
 # import my functions
 from ysc_Gresham2019.functions.getValuesForGeneGroups import getValuesForGeneGroups
 from ysc_Gresham2019.functions.addORForGene import addORForGene
 from ysc_Gresham2019.functions.getLogFcExpression import getLogFcExpression
-from ysc_Gresham2019.functions.getDiffExpressedGenes import getDiffExpressedGenes
+
 # import my scripts
 from ysc_Gresham2019.scripts.clusteredCorrMatrix import clusteredCorrMatrix
 from ysc_Gresham2019.scripts.getKmeansClusteringOnSelectedFeatures import getKmeansClusteringOnSelectedFeatures
 from ysc_Gresham2019.scripts.externalDataAnalysis import externalDataAnalysis
-from ysc_Gresham2019.scripts.similarityToExternalData import similarityToExternalData
 
 # set the colormap and centre the colorbar
 class MidpointNormalize(colors.Normalize):
@@ -66,7 +61,7 @@ stat_YPD_magic_t2__SlowRearranged.to_csv('./ysc_Gresham2019/Data/stat_YPD_magic_
 
 ###################################################################################################################
 
-# 2. Do KNN for slow cells based on average values for gene set clusters
+# 2A. Do KNN for slow cells based on average values for gene set clusters
 stat_YPD_magic_t2__SlowRearranged = pd.read_csv('./ysc_Gresham2019/Data/stat_YPD_magic_t2__SlowRearranged.csv',
                                                 index_col=0)
 YPD_magic_t2__SlowRearranged = pd.read_csv('./ysc_Gresham2019/Data/YPD_magic_t2__SlowRearranged.csv', index_col=0)
@@ -79,7 +74,7 @@ df = getKmeansClusteringOnSelectedFeatures(stat_YPD_magic_t2__SlowRearranged,
 df.to_csv('./ysc_Gresham2019/Data/stat_YPD_magic_t2__SlowRearranged_W_CellClusters.csv')
 
 
-# 2A. plot dataPhate on all cells (fast included) with defined above clustering
+# 2B. plot dataPhate on all cells (fast included) with defined above clustering
 YPD_magic_t2 = pd.read_csv('./ysc_Gresham2019/Data/YPD_magic_t2.csv', index_col=0)
 YPD_magic_t2.drop(columns=['Cells', 'Genotype'], inplace=True)
 phate_op = phate.PHATE()
@@ -115,10 +110,6 @@ for i in range(len(unqGroups)):
 
 statDfNormalized = getValuesForGeneGroups(dfNormalized, 'dict', slowMarkersDict)
 
-# get figure for Dhar VS vanDijk
-externalDataAnalysis()
-
-# get jitter
 for key, value in slowMarkersDict.items():
     values = statDfNormalized[key]
     scprep.plot.jitter(statDfNormalized['clusterPredictions'], values, c=values, title=key, cmap=['red', 'blue'],
@@ -131,9 +122,11 @@ for key, value in slowMarkersDict.items():
 
 ###################################################################################################################
 
-# 4. in phate space plot cells but color by values in slow markers
+# 4A. in Phate space (phate calculated only in slow cells) plot cells and color them by values in slow markers
 YPD_magic_t2__SlowRearranged = pd.read_csv('./ysc_Gresham2019/Data/YPD_magic_t2__SlowRearranged.csv',
                                                 index_col=0)
+totalStat = YPD_magic_t2.describe()
+
 phate_op = phate.PHATE()
 dataPhate = phate_op.fit_transform(YPD_magic_t2__SlowRearranged)
 unqGroups = list(set(dfSlowMarkers['Description']))
@@ -146,11 +139,42 @@ for i1 in range(len(unqGroups)):
                 norm=MidpointNormalize(midpoint=1, vmin=0.9, vmax=1.1))
     ax.set_title(unqGroups[i1], fontsize=10)
 plt.colorbar()
-plt.savefig('./ysc_Gresham2019/figures/scatter_PHATE_colored_SlowMarker.png')
+plt.savefig('./ysc_Gresham2019/figures/scatter_PHATE_slowCells_colored_SlowMarker.png')
+
+
+# 4B. in Phate space (phate calculated in all cells) plot cells and color them by values in slow markers
+YPD_magic_t2_W_Phate_and_cellClustering = \
+    pd.read_csv('./ysc_Gresham2019/Data/YPD_magic_t2_W_Phate_and_cellClustering.csv', index_col=0)
+
+totalStat = YPD_magic_t2.describe()
+dfNormalized = getLogFcExpression(YPD_magic_t2_W_Phate_and_cellClustering,
+                                  YPD_magic_t2__SlowRearranged.columns, totalStat, '50%')
+
+dfSlowMarkers = pd.read_csv('./ysc_Gresham2019/ExternalData/high TMRE profile.csv', sep='\t')
+dfSlowMarkers = addORForGene(dfSlowMarkers)
+slowMarkersDict = {}
+unqGroups = list(set(dfSlowMarkers['Description']))
+for i in range(len(unqGroups)):
+    slowMarkersDict.update({unqGroups[i]: dfSlowMarkers[dfSlowMarkers['Description'] == unqGroups[i]]['ORF'].tolist()})
+stat_dfNormalized = getValuesForGeneGroups(dfNormalized, 'dict', slowMarkersDict)
+
+unqGroups = list(set(dfSlowMarkers['Description']))
+fig = plt.figure(figsize=(15, 7))
+i = 0
+for i1 in range(len(unqGroups)):
+    i += 1
+    ax = plt.subplot(2, 4, i)
+    plt.scatter(YPD_magic_t2_W_Phate_and_cellClustering['Phate 1'],
+                YPD_magic_t2_W_Phate_and_cellClustering['Phate 2'],
+                c=stat_dfNormalized[unqGroups[i1]], s=5, cmap='Spectral',
+                norm=MidpointNormalize(midpoint=1, vmin=0.8, vmax=1.2))
+    ax.set_title(unqGroups[i1], fontsize=10)
+plt.colorbar()
+plt.savefig('./ysc_Gresham2019/figures/scatter_PHATE_allCells_colored_SlowMarker.png')
 
 ###################################################################################################################
 
-# 5. pairwise scatter plots between each pair of slow markers
+# 5. pairwise scatter plots between each pair of slow markers (only for slow cells)
 unqGroups = list(set(dfSlowMarkers['Description']))
 unqGroups.remove('Gasch RP')
 viridis = cm.get_cmap('viridis', 6)
@@ -174,7 +198,11 @@ for i1 in range(len(unqGroups)):
 plt.tight_layout()
 plt.savefig('./ysc_Gresham2019/figures/scatters_pairwise_SlowMarkers_w_CellClusters.png')
 
+###################################################################################################################
 
+# 6. get figure for Dhar VS vanDijk log2FC with colored slow markers
+
+externalDataAnalysis()
 
 
 
